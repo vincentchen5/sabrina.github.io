@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sabrina's Valentine Quest 💘</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Comic Sans MS", "Trebuchet MS", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: #3a1c2b;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      width: 90%;
+      max-width: 550px;
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0px 10px 30px rgba(0,0,0,0.15);
+      text-align: center;
+      position: relative;
+      animation: popIn 0.7s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 1.15rem;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: 0.2s;
+      margin: 8px;
+    }
+
+    .btn-main {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    .btn-main:hover {
+      transform: scale(1.05);
+      background: #ff2d55;
+    }
+
+    .btn-secondary {
+      background: #ffd6e0;
+      color: #3a1c2b;
+    }
+
+    .btn-secondary:hover {
+      transform: scale(1.05);
+      background: #ffb3c7;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .choices {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    .slider {
+      width: 80%;
+      margin: 20px auto;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #ff4d6d;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 22px;
+      animation: floatUp 4s linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-900px) scale(1.8);
+        opacity: 0;
+      }
+    }
+
+    .final-message {
+      font-size: 1.2rem;
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 15px;
+      background: #fff0f5;
+      box-shadow: inset 0px 0px 10px rgba(255, 77, 109, 0.25);
+    }
+
+    .tiny {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    
+    <!-- SCREEN 1 -->
+    <div id="screen1">
+      <h1>Hi Sabrina 🥔💖</h1>
+      <p>
+        Welcome to your official Valentine’s Mission.<br>
+        Complete this game to unlock your surprise 🎁
+      </p>
+      <button class="btn-main" onclick="nextScreen(2)">Start the Mission 💘</button>
+      <p class="tiny">(Failure is not an option, Potato.)</p>
+    </div>
+
+    <!-- SCREEN 2 -->
+    <div id="screen2" class="hidden">
+      <h1>Level 1: Choose the cutest couple 😌</h1>
+      <p>Pick wisely. Your future depends on it.</p>
+
+      <div class="choices">
+        <button class="btn-secondary" onclick="nextScreen(3)">Us 💕</button>
+        <button class="btn-secondary" onclick="wrongChoice()">A random couple 🤨</button>
+        <button class="btn-secondary" onclick="wrongChoice()">Two penguins 🐧🐧</button>
+      </div>
+
+      <p id="wrongText" class="tiny"></p>
+    </div>
+
+    <!-- SCREEN 3 -->
+    <div id="screen3" class="hidden">
+      <h1>Level 2: Identify Sabrina’s favorite person</h1>
+      <p>There is only one correct answer. Choose carefully.</p>
+
+      <div class="choices">
+        <button class="btn-secondary" onclick="wrongChoice2()">A celebrity 😐</button>
+        <button class="btn-secondary" onclick="wrongChoice2()">A cat (maybe) 🐱</button>
+        <button class="btn-main" onclick="nextScreen(4)">Vincent 😎💘</button>
+      </div>
+
+      <p id="wrongText2" class="tiny"></p>
+    </div>
+
+    <!-- SCREEN 4 -->
+    <div id="screen4" class="hidden">
+      <h1>Level 3: How much do you love Vincent?</h1>
+      <p>Slide it. But be honest 😌</p>
+
+      <div class="slider">
+        <input type="range" id="loveSlider" min="0" max="100" value="10" />
+        <p id="sliderValue">Current love level: 10%</p>
+      </div>
+
+      <button class="btn-main" onclick="checkSlider()">Lock In 💖</button>
+      <p id="sliderMessage" class="tiny"></p>
+    </div>
+
+    <!-- SCREEN 5 -->
+    <div id="screen5" class="hidden">
+      <h1>Sabrina… 🥺💘</h1>
+      <p>Will you be my Valentine?</p>
+
+      <div class="choices">
+        <button id="yesBtn" class="btn-main" onclick="finalScreen()">YES 😍</button>
+        <button id="noBtn" class="btn-secondary">No 🙄</button>
+      </div>
+
+      <p id="noMessage" class="tiny"></p>
+    </div>
+
+    <!-- FINAL SCREEN -->
+    <div id="final" class="hidden">
+      <h1>YAYYYYYYYYY 💕🥔💘</h1>
+      <p class="final-message">
+        Sabrina, my adorable Potato,<br><br>
+        You make my life happier, warmer, and honestly way funnier.<br><br>
+        I love you so much and I’m insanely lucky to have you.<br><br>
+        Happy Valentine’s Day 💖
+      </p>
+
+      <p class="tiny">Now come claim your prize 🎁 (aka cuddles + kisses + food)</p>
+
+      <button class="btn-main" onclick="spawnConfetti()">Claim Prize 💝</button>
+    </div>
+
+  </div>
+
+  <script>
+    let noClickCount = 0;
+
+    function nextScreen(num) {
+      for (let i = 1; i <= 5; i++) {
+        let screen = document.getElementById("screen" + i);
+        if (screen) screen.classList.add("hidden");
+      }
+      document.getElementById("final").classList.add("hidden");
+
+      document.getElementById("screen" + num).classList.remove("hidden");
+    }
+
+    function wrongChoice() {
+      const messages = [
+        "Sabrina… that’s embarrassing 😭",
+        "Potato, focus 😤",
+        "Try again before I cry 🥺",
+        "Wrong. But you're still cute."
+      ];
+      document.getElementById("wrongText").innerText =
+        messages[Math.floor(Math.random() * messages.length)];
+    }
+
+    function wrongChoice2() {
+      const messages = [
+        "Wrong. But I respect the confidence 😭",
+        "Nice try, Potato.",
+        "Incorrect. The correct answer is obviously Vincent 😎",
+        "Sabrina please…"
+      ];
+      document.getElementById("wrongText2").innerText =
+        messages[Math.floor(Math.random() * messages.length)];
+    }
+
+    const slider = document.getElementById("loveSlider");
+    const sliderValue = document.getElementById("sliderValue");
+
+    slider.addEventListener("input", () => {
+      sliderValue.innerText = `Current love level: ${slider.value}%`;
+
+      if (slider.value < 90) {
+        document.getElementById("sliderMessage").innerText =
+          "Hmm… seems a little low bestie 🤨";
+      } else {
+        document.getElementById("sliderMessage").innerText =
+          "Okayyyy now we're talking 😌💖";
+      }
+    });
+
+    function checkSlider() {
+      if (slider.value < 100) {
+        document.getElementById("sliderMessage").innerText =
+          "Nope. It must be 100%. I don't make the rules 😤💘";
+        slider.value = 100;
+        sliderValue.innerText = `Current love level: ${slider.value}%`;
+      } else {
+        nextScreen(5);
+      }
+    }
+
+    const noBtn = document.getElementById("noBtn");
+    const noMessage = document.getElementById("noMessage");
+
+    noBtn.addEventListener("mouseover", () => {
+      const card = document.querySelector(".card");
+      const cardRect = card.getBoundingClientRect();
+
+      const x = Math.random() * (cardRect.width - 120);
+      const y = Math.random() * (cardRect.height - 60);
+
+      noBtn.style.position = "absolute";
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+
+      noClickCount++;
+
+      const messages = [
+        "Nice try 😌",
+        "Potato, you thought 😭",
+        "The 'No' option is under maintenance 💅",
+        "Incorrect selection.",
+        "Sabrina pls 😩",
+        "You are legally required to click YES 💘"
+      ];
+
+      noMessage.innerText = messages[Math.floor(Math.random() * messages.length)];
+
+      if (noClickCount > 6) {
+        noMessage.innerText = "Okay fine. I removed the No button. 💀";
+        noBtn.style.display = "none";
+
+        const yesBtn = document.getElementById("yesBtn");
+        yesBtn.style.transform = "scale(1.3)";
+        yesBtn.innerText = "YES OBVIOUSLY 😍💖";
+      }
+    });
+
+    function finalScreen() {
+      for (let i = 1; i <= 5; i++) {
+        let screen = document.getElementById("screen" + i);
+        if (screen) screen.classList.add("hidden");
+      }
+      document.getElementById("final").classList.remove("hidden");
+      spawnHearts();
+    }
+
+    function spawnHearts() {
+      for (let i = 0; i < 30; i++) {
+        let heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerText = "💖";
+
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.bottom = "-20px";
+        heart.style.animationDuration = (2 + Math.random() * 3) + "s";
+        heart.style.fontSize = (18 + Math.random() * 25) + "px";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+          heart.remove();
+        }, 4000);
+      }
+    }
+
+    function spawnConfetti() {
+      const emojis = ["💘", "💖", "💕", "🥔", "✨", "😍", "💝", "🎉"];
+      for (let i = 0; i < 50; i++) {
+        let conf = document.createElement("div");
+        conf.classList.add("heart");
+        conf.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+
+        conf.style.left = Math.random() * window.innerWidth + "px";
+        conf.style.bottom = "-20px";
+        conf.style.animationDuration = (2 + Math.random() * 3) + "s";
+        conf.style.fontSize = (18 + Math.random() * 30) + "px";
+
+        document.body.appendChild(conf);
+
+        setTimeout(() => {
+          conf.remove();
+        }, 4000);
+      }
+    }
+  </script>
+</body>
+</html>
